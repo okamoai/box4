@@ -1,65 +1,63 @@
 <template>
-  <div>
-    <Heading text="Home" />
-    <img src="../assets/logo.png" decoding="async" alt="" />
-    <p>
-      <span class="count">
-        count1: <span class="number">{{ count1 }}</span>
-      </span>
-      <button @click="addCount1">+</button>
-      <button @click="minusCount1">-</button>
-    </p>
-    <p>
-      <span class="count">
-        count2: <span class="number">{{ count2 }}</span>
-      </span>
-      <button @click="addCount2">+</button>
-      <button @click="minusCount2">-</button>
-    </p>
+  <div class="home">
+    <Information />
+    <Screen />
+    <transition name="fade">
+      <Gameover v-show="isGameOver" />
+    </transition>
   </div>
 </template>
 
 <script lang="ts">
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
+import { WINNER_POINT } from '../const'
+import { sePlay } from '../utils'
 import { useStore } from '../store'
 import { ActionTypes } from '../store/actionTypes'
-import Heading from '../components/Heading.vue'
+import Information from '../components/Information.vue'
+import Screen from '../components/Screen.vue'
+import Gameover from '../components/Gameover.vue'
 
 export default {
-  name: 'Home',
+  name: 'Main',
   components: {
-    Heading,
+    Information,
+    Screen,
+    Gameover,
   },
   setup() {
     const store = useStore()
+    const winners = computed(() => store.state.winners)
+    const isGameOver = computed(() => store.getters.isGameOver)
 
-    const count1 = computed(() => store.state.count1)
-    const count2 = computed(() => store.state.count2)
-    const addCount1 = () => store.dispatch(ActionTypes.ADD_COUNT_1, 1)
-    const minusCount1 = () => store.dispatch(ActionTypes.MINUS_COUNT_1, 1)
-    const addCount2 = () => store.dispatch(ActionTypes.ADD_COUNT_2, 1)
-    const minusCount2 = () => store.dispatch(ActionTypes.MINUS_COUNT_2, 1)
-
+    watch(winners, (val) => {
+      if (val.length === 0) {
+        return
+      }
+      sePlay('win')
+      const { user } = val.slice(-1)[0]
+      const point = WINNER_POINT[val.length - 1]
+      store.dispatch(ActionTypes.UPDATE_SCORE, { user, point })
+    })
     return {
-      count1,
-      count2,
-      addCount1,
-      minusCount1,
-      addCount2,
-      minusCount2,
+      isGameOver,
     }
   },
 }
 </script>
 
 <style scoped>
-.count {
-  margin-right: 24px;
+.home {
+  height: calc(var(--vh) * 100);
+  display: grid;
+  grid-template-columns: 136px 1fr;
 }
-.number {
-  font-size: 2rem;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
-button {
-  margin-left: 8px;
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

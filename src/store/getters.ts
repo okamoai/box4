@@ -2,15 +2,15 @@ import { GetterTree } from 'vuex'
 import { State } from './state'
 
 export type Getters = {
-  timesCount(state: State): number
-  divisionCount(state: State): number
+  isPlaying(state: State): boolean
+  isGameOver(state: State): boolean
 }
 
 export const getters: GetterTree<State, State> & Getters = {
-  timesCount(state) {
-    return state.count1 * state.count2
+  isPlaying(state) {
+    return state.historyIndex > 0
   },
-  divisionCount(state) {
-    return state.count1 / state.count2
+  isGameOver(state) {
+    return state.winners.length === state.users.length - 1
   },
 }

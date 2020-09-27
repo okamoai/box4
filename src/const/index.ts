@@ -1,0 +1,9 @@
+export const PLACEHOLDER = -1
+export const EMPTY = -2
+export const MIN_USER = 2
+export const MAX_USER = 4
+export const WINNER_POINT = [10, 7, 4, 0]
+export const WINNER_RANK = ['1st', '2nd', '3rd', '4th']
+export const INITIAL_ORDER = 0
+export const INITIAL_WIN_NUMBER = 4
+export const INITIAL_USER_COLOR = ['#ff0000', '#0000ff', '#00ff00', '#ffff00']

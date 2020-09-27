@@ -1,16 +1,16 @@
-html {
-  font-size: 62.5%;
-  height: 100%;
+:root {
+  --vh: 1%;
 }
+
+html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  font-size: 1.4rem;
+  height: calc(var(--vh) * 100);
+}
+#app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-#app {
-  height: 100%;
+  height: calc(var(--vh) * 100);
 }
